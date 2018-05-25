@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="expires" content="0">
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" comtent="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="expires" content="0">
+		<title>RAID 5ЕЕ</title>
+		<link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+		<link rel="stylesheet" href="style/bootstrap.min.css">
+		<link rel="stylesheet" href="style/style.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/count_01.js"></script>
+		</script>
+	</head>
+	<body>
+		<main>
+			<div class="container" style="margin-top: 100px">
+				<div class="col-sm-4">
+					<h3>Дано:</h3>
+					<ul>
+						<li>
+							<h4>Ёмкость одного диска = 60GB</h4>
+						</li>
+						<li>
+							<h4>Размер набора = 120GB</h4>
+						</li>
+						<li>
+							<h4>Количество наборов = 2</h4>
+						</li>
+						<li>
+							<h4>Используемый RAID = RAID 50</h4>
+						</li>
+					</ul>
+					<form>
+						<div class="form-group">
+							<label>Количество дисков</label>
+							<input class="form-control" id="ex">
+						</div>
+					</form>
+					<button id="count" class="btn">Пересчитать</button>
+				</div>
+				<div class="col-sm-8">
+					<h4 id="ef">Эффeктивность: </h4>
+					<table id="myTable">
+					</table>
+					
+				</div>
+			</div>
+		</main>
+		<script>
+			var N = 0;
+			var created = false;
+			var efc = 0;
+
+			$("#ex").keyup(function(){
+	            N = $(this).val();
+	        });
+			$( "#count" ).click(function() {
+				if (N%2 != 0){
+	            	alert('Количество дисков должно быть чётным');
+	            	return;
+				}	
+				var table = document.getElementById("myTable");
+				if (created == true){
+					table.deleteRow(0);
+					table.deleteRow(0);
+				}				
+				var row = table.insertRow(0);
+				var x = 60/(N/2-1);
+				for (j = 0; j <= N; j++){
+					var cell = row.insertCell(j);
+					if (j == 0)
+						cell.innerHTML = "Хеш-В";
+					else if (j == N/2-1){
+						cell.innerHTML = "Хеш-A";
+					}
+					else if (j == N/2){
+						cell.innerHTML = "";
+					}
+					else if (j == N/2+1){
+						cell.innerHTML = "Хеш-B";
+					}
+					else if (j == N){
+						cell.innerHTML = "Хеш-A";
+					}
+					else{	
+						cell.innerHTML = " "+x+"Gb";
+					}
+				}
+				var row = table.insertRow(0);
+				for (j = 0; j <= N; j++){
+					var cell = row.insertCell(j);
+					if (j == N/2){
+						cell.innerHTML = "";
+					}
+					else{
+						cell.innerHTML = " "+x+"Gb";	
+					}
+				}
+				created = true;
+				$( "#ef" ).append(24000/(N*60)+"%");
+			});
+		</script>
+
+	</body>
+</html>
